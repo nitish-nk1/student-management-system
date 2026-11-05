@@ -1,5 +1,8 @@
 package in.strikes.crudSpringBootDemo.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 import in.strikes.crudSpringBootDemo.dto.CreateStudentRequestDto;
 import in.strikes.crudSpringBootDemo.dto.CreateStudentResponseDto;
@@ -16,6 +19,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/students")
+@Tag(
+        name = "Student Management",
+        description = "APIs for managing student records"
+)
 public class StudentController {
 
     private StudentService studentService;
@@ -23,6 +30,10 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    @Operation(
+            summary = "Create Student",
+            description = "Creates a new student record"
+    )
     @PostMapping
     public ResponseEntity<CreateStudentResponseDto> createStudent(
             @Valid @RequestBody CreateStudentRequestDto studentReq){
@@ -37,6 +48,11 @@ public class StudentController {
     }
 
     // Read one student
+
+    @Operation(
+            summary = "Get Student",
+            description = "Get a student record by id"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<CreateStudentResponseDto> getStudent(@PathVariable Long id){
         CreateStudentResponseDto studentResp = studentService.getStudentById(id);
@@ -46,6 +62,10 @@ public class StudentController {
     }
 
     // Read All student
+    @Operation(
+            summary = "Get Students",
+            description = "Get all students record"
+    )
     @GetMapping
     public ResponseEntity<List<CreateStudentResponseDto>> getAllStudent(){
         List<CreateStudentResponseDto> studentResp = studentService.getAllStudent();
@@ -55,7 +75,10 @@ public class StudentController {
     }
 
     // Update Student
-
+    @Operation(
+            summary = "Update Student",
+            description = "update a existing student record"
+    )
     @PutMapping
     public ResponseEntity<UpdateStudentResponseDto> updateStudentById(@RequestParam Long id,
                                                      @RequestBody UpdateStudentRequestDto studentReq){
@@ -65,6 +88,10 @@ public class StudentController {
         return ResponseEntity.ok(studentResp);
     }
 
+    @Operation(
+            summary = "Delete Student",
+            description = "Delete a student form database"
+    )
     @DeleteMapping
     public ResponseEntity<String> deleteStudentByID(@RequestParam Long id){
         studentService.deleteStudent(id);
@@ -72,6 +99,10 @@ public class StudentController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(
+            summary = "Soft Delete Student",
+            description = "Marks a student record as deleted without permanently removing it from the database."
+    )
     @PatchMapping("/softdelete")
     public ResponseEntity<String> softDeletedStudent(@RequestParam Long id){
         studentService.deleteStudentSoftly(id);
